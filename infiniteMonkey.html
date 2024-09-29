@@ -60,7 +60,6 @@
             border-radius: 4px;
             padding: 5px 10px;
             border: solid 1px transparent;
-            /* background-color: rgba(63,94,251,1); */
             color: #fff;
             font-size: 15px;
             font-weight: 600;
@@ -184,13 +183,11 @@
 
             for(;;){
                 counter++
-
                 //Create a random word with the same words
                 for(let i = 0; i < numLetras; i++){
                     let letra = letras[Math.floor(Math.random() * (27))]
                     cadenaEnContruccion += letra;
                 }
-
                 //Check if the created random word it's like the input
                 if(cadenaEnContruccion == word){
                     document.querySelector('.container').innerHTML = `The word <b>${cadenaEnContruccion}</b> has taken <i>${Intl.NumberFormat("es-ES", {maximumFractionDigits: 3,}).format(counter)}</i> combinations`
@@ -201,7 +198,6 @@
                 }else{
                     cadenaEnContruccion = '';
                 }
-                
             }
         }
     </script>
