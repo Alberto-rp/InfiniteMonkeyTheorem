@@ -31,7 +31,7 @@ let randomWorld = (word) => {
     const start = Date.now();
     var counter = 0;
     let numLetras = word.length;
-    let cadenaEnContruccion = '';
+    let exitCharChaim = '';
     const letras = ['a','b','c','d','e','f','g','h','i','j','k','l', 'ñ','m','n','o','p','q','r','s','t','u','v','w','x','y','z'];
 
     // Inner functions
@@ -45,17 +45,17 @@ let randomWorld = (word) => {
         //Create a random word with the same words
         for(let i = 0; i < numLetras; i++){
             let letra = letras[Math.floor(Math.random() * (27))]
-            cadenaEnContruccion += letra;
+            exitCharChaim += letra;
         }
         //Check if the created random word it's like the input
-        if(cadenaEnContruccion == word){
-            document.querySelector('.container').innerHTML = `The word <b>${cadenaEnContruccion}</b> has taken <i>${Intl.NumberFormat("es-ES", {maximumFractionDigits: 3,}).format(counter)}</i> combinations`
+        if(exitCharChaim == word){
+            document.querySelector('.container').innerHTML = `The word <b>${exitCharChaim}</b> has taken <i>${Intl.NumberFormat("es-ES", {maximumFractionDigits: 3,}).format(counter)}</i> combinations`
             document.querySelector('.response-container').classList.add('show');
             document.querySelector('.spinner-container').classList.remove('show');
             showElapsedTime();
             break
         }else{
-            cadenaEnContruccion = '';
+            exitCharChaim = '';
         }
     }
 }
