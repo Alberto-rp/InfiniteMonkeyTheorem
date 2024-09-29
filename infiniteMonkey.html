@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Infinite Monkey Theorem</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+        body {
+            font-family: "Roboto", sans-serif;
+            padding: 0;
+            margin: 0;
+            background: rgb(63,94,251);
+            background: radial-gradient(circle, rgba(63,94,251,1) 0%, rgba(252,70,107,1) 100%);
+            height: 100vh;
+        }
+
+        .content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 15px;
+        }
+        
+        .fakeForm__inputText {
+           margin-top: 5px;
+        }
+
+        /* Imputs */
+        #word {
+            padding-inline: 8px;
+            color: #fff;
+            height: 20px;
+            border: solid 2px rgba(63,94,251,1);
+            background-color: transparent;
+            border-radius: 3px;
+            height: 30px;
+        }
+        #word::placeholder {
+            color: rgb(47, 47, 47);
+            font-size: 12px;
+            font-style: italic;
+        }
+        #word:active, #word:focus {
+            outline: none;
+        }
+        label {
+            font-size: 14px;
+            font-weight: 700;
+            margin-left: 8px;
+            position: absolute;
+            margin-top: -15px;
+            margin-left: 0px;
+            background: rgba(63,94,251,1);
+            border-radius: 2px;
+            padding: 0 5px;
+        }
+
+        .fakeForm__submit{
+            margin-top: 10px;
+            border-radius: 4px;
+            padding: 5px 10px;
+            border: solid 1px transparent;
+            /* background-color: rgba(63,94,251,1); */
+            color: #fff;
+            font-size: 15px;
+            font-weight: 600;
+            background: linear-gradient(90deg, rgba(63,94,251,1) 5%, rgba(34,49,134,1) 93%);
+            background-size: 150%;
+            background-position: left;
+            transition: all 1s ease-out;
+        }
+        
+        .fakeForm__submit:hover{
+            cursor: pointer;
+            background-position: right;
+            transition: all 1s ease-out;
+        }
+
+        /* Small details */
+        input:-webkit-autofill,
+        input:-webkit-autofill:hover, 
+        input:-webkit-autofill:focus, 
+        input:-webkit-autofill:active{
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: #ffffff;
+            transition: background-color 5000s ease-in-out 0s;
+            box-shadow: inset 0 0 20px 20px #23232329;
+        }
+
+        
+        /* Spinner */
+        .spinner-container, .response-container{
+            margin-top: 20px;
+            display: none;
+        }
+        .spinner-container div{
+            width: 100%;
+            height: 200px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .loader {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: inline-block;
+            border-top: 3px solid rgba(252,70,107,1);
+            border-right: 3px solid transparent;
+            box-sizing: border-box;
+            animation: rotation 1s linear infinite;
+        }
+        @keyframes rotation {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+        
+        /* Random */
+        .show{
+            display: block !important;
+        }
+
+        .warning {
+            visibility: hidden;
+            font-size: 12px;
+            font-style: italic;
+            margin: 6px 0 0;
+            padding: 5px;
+            width: fit-content;
+            color: red;
+            background-color: black;
+        }
+        .warning.visible{
+            visibility: visible;
+        }
+   
+    </style>
+    <script>
+        window.addEventListener("load", init);
+        function init() {
+            //Send word
+            document.querySelector('#sendWord').addEventListener('click', () => {
+                let word = document.querySelector('#word').value
+                showSpinner();
+                setTimeout(() => {
+                    randomWorld(word);
+                }, 250);
+            })
+
+            //Check if the word it's bigger or equal to 7
+            document.querySelector('#word').addEventListener('input', () => {
+                let word = document.querySelector('#word').value
+                if (word.length >= 7){
+                    document.querySelector('.warning').classList.add('visible')
+                }else{
+                    document.querySelector('.warning').classList.remove('visible')
+                }
+
+            })
+        }
+
+        let showSpinner = () => {
+            document.querySelector('.spinner-container').classList.add('show');
+            document.querySelector('.response-container').classList.remove('show');
+        }
+
+        let randomWorld = (word) => {
+            // Inner vars
+            const start = Date.now();
+            var counter = 0;
+            let numLetras = word.length;
+            let cadenaEnContruccion = '';
+            const letras = ['a','b','c','d','e','f','g','h','i','j','k','l', 'ñ','m','n','o','p','q','r','s','t','u','v','w','x','y','z'];
+
+            // Inner functions
+            let showElapsedTime = () => {
+                let elapsedTime = Math.floor((Date.now() - start));
+                document.querySelector('.timmer').innerHTML = `A very fast monkey would have taken ${Math.floor(elapsedTime / 1000)} Seconds (${elapsedTime}ms)`
+            }
+
+            for(;;){
+                counter++
+
+                //Create a random word with the same words
+                for(let i = 0; i < numLetras; i++){
+                    let letra = letras[Math.floor(Math.random() * (27))]
+                    cadenaEnContruccion += letra;
+                }
+
+                //Check if the created random word it's like the input
+                if(cadenaEnContruccion == word){
+                    document.querySelector('.container').innerHTML = `The word <b>${cadenaEnContruccion}</b> has taken <i>${Intl.NumberFormat("es-ES", {maximumFractionDigits: 3,}).format(counter)}</i> combinations`
+                    document.querySelector('.response-container').classList.add('show');
+                    document.querySelector('.spinner-container').classList.remove('show');
+                    showElapsedTime();
+                    break
+                }else{
+                    cadenaEnContruccion = '';
+                }
+                
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="content">
+        <h3>Infinite monkey theorem 🐵</h3>
+        <p>"The infinite monkey theorem states that a monkey hitting keys at random on a typewriter keyboard for an infinite amount of time will almost surely type any given text, including the complete works of William Shakespeare. In fact, the monkey would almost surely type every possible finite text an infinite number of times. The theorem can be generalized to state that any sequence of events that has a non-zero probability of happening will almost certainly occur an infinite number of times, given an infinite amount of time or a universe that is infinite in size."</p>
+        <span><i>From Wikipedia, the free encyclopedia</i></span>
+        <br><br><br>
+        <div class="fakeForm">
+            <div class="fakeForm__inputText">
+                <label for="word">Desired word</label>
+                <input type="text" name="word" id="word" maxlength="9" placeholder="lowercase only"><br>
+                <p class="warning">Be careful, words of 7 or more letters can take several time</p>
+            </div>
+            <input type="button" value="Put the monkey to write" id="sendWord" class="fakeForm__submit">
+        </div>
+        <div class="spinner-container">
+            <div><span class="loader"></span></div>
+        </div>
+        <div class="response-container">
+            <div class="container"></div>
+            <div class="timmer"></div>
+            <iframe src="https://giphy.com/embed/1229mlttgo8aR2" width="480" height="360" style="" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>
+        </div>
+    </div>
+</body>
+</html>
